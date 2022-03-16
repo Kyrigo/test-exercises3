@@ -11,7 +11,7 @@ internal class Program
             {
                 Console.WriteLine("[1]Словарь из строки\n[2]Считаем числа с консоли до введения -1");
                 selection = int.Parse(Console.ReadLine());
-            } while (selection < 0 || selection > 2);
+            } while (selection is < 0 or > 2);
 
             switch (selection)
             {
