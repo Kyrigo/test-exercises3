@@ -18,12 +18,7 @@ internal class Program
                 case 1:
                     Console.WriteLine("Введите строку: ");
                     var word = Console.ReadLine();
-                    var dictionary = new Dictionary<char, int>();
-                    for (var i = 0; i < word.Length; i++)
-                    {
-                        var count = word.Count(f => f == word[i]);
-                        dictionary[word[i]] = count;
-                    }
+                    var dictionary = word.GroupBy(ch => ch).ToDictionary(g => g.Key, g => g.Count());
 
                     foreach (KeyValuePair<char, int> kvp in dictionary)
                     {
@@ -31,31 +26,28 @@ internal class Program
                     }
                     break;
                 case 2:
-                    var num = 0;
                     var listOfNums = new Dictionary<int, int>();
-                    var numbers = new List<int>();
                     Console.WriteLine("Вводите числа через нажатие Enter. Когда закончите вводить нужные числа, введите -1, чтобы узнать какие из введенных чисел повторяются");
                     while (true)
                     {
                         var entryLine = Console.ReadLine();
                         if (entryLine == "-1")
                         {
-                            for (var i = 0; i < numbers.Count; i++)
-                            {
-                                listOfNums[numbers[i]] = numbers.Count(f => f == numbers[i]);
-                            }
-
-                            foreach (KeyValuePair<int, int> kvp in listOfNums)
-                            {
-                                if (kvp.Value != 1)
-                                {
-                                    Console.WriteLine("Число {0} повторяется {1} раз(-а)", kvp.Key, kvp.Value);
-                                }
-                            }
                             break;
                         }
-                        numbers.Add(Convert.ToInt32(entryLine));
-                        num++;
+                        var number = Convert.ToInt32(entryLine);
+                        if (listOfNums.TryGetValue(number, out var value))
+                        {
+                            listOfNums[number] = value + 1;
+                        }
+                        else listOfNums[number] = 1;
+                    }
+                    foreach (KeyValuePair<int, int> kvp in listOfNums)
+                    {
+                        if (kvp.Value != 1)
+                        {
+                            Console.WriteLine("Число {0} повторяется {1} раз(-а)", kvp.Key, kvp.Value);
+                        }
                     }
                     break;
             }
